@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=utf-8
+Content-Length: 577
+Expires: Tue, 01 Jan 1980 00:00:00 GMT
+Cache-Control: no-cache
+Pragma: no-cache
+Date: Fri, 01 Sep 2022 15:15:15 GMT
+Connection: keep-alive
+
+{
+    "errors": [],
+    "data": "{\"id\":\"purchase-id\",\"status\":\"CREATED\",\"purchase_url\":\"https:\\/\\/merchant.esto.ee\\/application\\/purchase-id\",\"merchant_reference\":\"ref\",\"amount\":545.5,\"currency\":\"EUR\",\"is_test\":true,\"return_url\":\"return-url\",\"notification_url\":\"notification-url\"}",
+    "mac": "20E8417EDA8C732C300FCFA0EAB4BB666DD91E45214AA66F7AFB84CB25599C99F8A3E2ADC7E3FB0E63B7AF06C0DF66FDDCEB4F9D4CD0EDD97EB5FF4EE8B1ACE7"
+}
