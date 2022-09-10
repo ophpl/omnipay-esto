@@ -63,12 +63,14 @@ class Client
      * @param $connectionMode string live or test
      * @param $customer
      * @param $items
+     *
      * @return mixed
+     *
      * @throws \Exception
      */
     public function purchase($amount, $currency, $reference, $returnURL, $notificationURL, $connectionMode, $customer, $items)
     {
-        return $this->send('v2/purchase/redirect', array(
+        return $this->send('v2/purchase/redirect', [
             'amount' => $amount,
             'currency' => $currency,
             'reference' => $reference,
@@ -77,12 +79,13 @@ class Client
             'connection_mode' => $connectionMode,
             'items' => $items,
             'customer' => $customer,
-        ));
+        ]);
     }
 
     public function fetch($endpoint)
     {
         $response = $this->request($endpoint);
+
         return json_decode($response->getBody()->getContents(), true);
     }
 
@@ -104,7 +107,9 @@ class Client
      * @param $endpoint
      * @param $method
      * @param $body
+     *
      * @return \Psr\Http\Message\ResponseInterface
+     *
      * @throws \Http\Client\Exception
      */
     protected function request($endpoint, $method = 'GET', $body = null)

@@ -15,7 +15,7 @@ class ClientTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->client = new Client("https://api.esto.ee", "username", "password", $this->getHttpClient());
+        $this->client = new Client('https://api.esto.ee', 'username', 'password', $this->getHttpClient());
     }
 
     public function testCalculatePayments()
