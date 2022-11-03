@@ -32,6 +32,40 @@ The following gateways are provided by this package:
 For general usage instructions, please see the main [Omnipay](https://github.com/omnipay/omnipay)
 repository.
 
+### Example
+```php
+<?php
+
+include 'vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use Omnipay\Common\Http\Client as OmnipayClient;
+use Omnipay\Omnipay;
+
+$adapter = new Client();
+$httpClient = new OmnipayClient($adapter);
+
+$gateway = Omnipay::create('Esto', $httpClient);
+$gateway->setUrl('https://api.esto.ee');
+$gateway->setUsername('username');
+$gateway->setPassword('password');
+$gateway->setTestMode(true);
+
+$request = $gateway->purchase([
+    'amount' => 550.50,
+    'currency' => 'EUR',
+    'transactionReference' => 'ref-1',
+    'scheduleType' => 'ESTO_X',
+    'returnUrl' => 'http://localhost/return.php',
+    'notifyUrl' => 'http://localhost/notify.php',
+]);
+
+$data = $request->getData();
+$result = $request->sendData($data);
+
+header("Location: ".$result->getRedirectUrl());
+```
+
 ## Support
 
 If you are having general issues with Omnipay, we suggest posting on

@@ -55,22 +55,25 @@ class Client
     }
 
     /**
-     * @param $amount
-     * @param $currency
-     * @param $reference
-     * @param $returnURL
-     * @param $notificationURL
-     * @param $connectionMode string live or test
-     * @param $customer
-     * @param $items
+     * @param float  $amount
+     * @param string $currency
+     * @param string $reference
+     * @param string $returnURL
+     * @param string $notificationURL
+     * @param string $connectionMode         live or test
+     * @param mixed  $customer
+     * @param mixed  $items
+     * @param string $schedule_type          Application type that will be selected for the customer in the application flow. Defaults to REGULAR.
+     * @param array  $display_schedule_types Array of schedule types to choose from that will be displayed to the client during the application flow. Leave it empty to display no options.
+     * @param array  $allowed_customer_types If you want to specify, which types of customers can apply for the loan. Leave blank for all types!
      *
      * @return mixed
      *
      * @throws \Exception
      */
-    public function purchase($amount, $currency, $reference, $returnURL, $notificationURL, $connectionMode, $customer, $items)
+    public function purchase($amount, $currency, $reference, $returnURL, $notificationURL, $connectionMode, $customer, $items, $schedule_type = 'REGULAR', $display_schedule_types = [], $allowed_customer_types = [])
     {
-        return $this->send('v2/purchase/redirect', [
+        $request = [
             'amount' => $amount,
             'currency' => $currency,
             'reference' => $reference,
@@ -79,7 +82,21 @@ class Client
             'connection_mode' => $connectionMode,
             'items' => $items,
             'customer' => $customer,
-        ]);
+        ];
+
+        if (!empty($schedule_type)) {
+            $request['schedule_type'] = $schedule_type;
+        }
+
+        if (!empty($display_schedule_types)) {
+            $request['display_schedule_types'] = $display_schedule_types;
+        }
+
+        if (!empty($allowed_customer_types)) {
+            $request['allowed_customer_types'] = $allowed_customer_types;
+        }
+
+        return $this->send('v2/purchase/redirect', $request);
     }
 
     public function fetch($endpoint)
