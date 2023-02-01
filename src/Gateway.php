@@ -4,6 +4,7 @@ namespace Omnipay\Esto;
 
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\AbstractRequest;
+use Omnipay\Esto\Message\AcceptNotification;
 use Omnipay\Esto\Message\PurchaseRequest;
 
 /**
@@ -106,5 +107,15 @@ class Gateway extends AbstractGateway
     public function purchase(array $parameters = [])
     {
         return $this->createRequest('\Omnipay\Esto\Message\PurchaseRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return AbstractRequest|AcceptNotification
+     */
+    public function acceptNotification(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Esto\Message\AcceptNotification', $parameters);
     }
 }

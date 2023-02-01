@@ -108,15 +108,20 @@ class PurchaseRequest extends AbstractRequest
         ];
 
         if (!empty($this->getCard())) {
-            $request['customer'] = [
-                'first_name' => $this->getCard()->getFirstName(),
-                'last_name' => $this->getCard()->getLastName(),
-                'email' => $this->getCard()->getEmail(),
-                'phone' => $this->getCard()->getPhone(),
-                'address' => trim(sprintf('%s %s', $this->getCard()->getAddress1(), $this->getCard()->getAddress2())),
-                'city' => $this->getCard()->getCity(),
-                'post_code' => $this->getCard()->getPostcode(),
-            ];
+            if (!empty($this->getCard())) {
+                $request['customer'] = [
+                    'first_name' => $this->getCard()->getFirstName(),
+                    'last_name' => $this->getCard()->getLastName(),
+                    'email' => $this->getCard()->getEmail(),
+                    'address' => trim(sprintf('%s %s', $this->getCard()->getAddress1(), $this->getCard()->getAddress2())),
+                    'city' => $this->getCard()->getCity(),
+                    'post_code' => $this->getCard()->getPostcode(),
+                ];
+
+                if (!empty($this->getCard()->getPhone())) {
+                    $request['customer']['phone'] = $this->getCard()->getPhone();
+                }
+            }
         }
 
         if (!empty($this->getItems())) {

@@ -2,6 +2,7 @@
 
 namespace Omnipay\Esto\Api;
 
+use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Http\ClientInterface;
 
 /**
@@ -111,13 +112,48 @@ class Client
         $response = $this->request($endpoint, 'POST', json_encode($request));
         $content = json_decode($response->getBody()->getContents(), true);
 
-        $verification = strtoupper(hash('sha512', sprintf('%s%s', $content['data'], $this->password)));
+        $verification = $this->composeMac($content['data']);
 
         if ($content['mac'] != $verification) {
             throw new \Exception(sprintf('invalid mac %s != %s', $verification, $content['mac']));
         }
 
         return json_decode($content['data'], true);
+    }
+
+    /**
+     * Verify the MAC of the received request
+     *
+     * @param array $request Associative array of request data
+     * @return bool TRUE if MAC verification was successful, FALSE otherwise
+     */
+    public function verifyMac($request)
+    {
+        $expected = $this->composeMac($request['json']);
+
+        return ($request['mac'] == $expected);
+    }
+
+    /**
+     * Extract data from request.
+     *
+     * @param array $request Request data (ie. $_REQUEST)
+     * @param bool $associative Whether to return the data as an associative array or object, defaults to array
+     * @throws InvalidRequestException if unable to extract data from request
+     * @return mixed An object or associative array containing the data
+     */
+    public function extractRequestData($request, $associative = true)
+    {
+        if (empty($request['json'])) {
+            throw new InvalidRequestException('Unable to extract data from request');
+        }
+
+        return json_decode($request['json'], $associative);
+    }
+
+    protected function composeMac($data)
+    {
+        return strtoupper(hash('sha512', sprintf('%s%s', $data, $this->password)));
     }
 
     /**
